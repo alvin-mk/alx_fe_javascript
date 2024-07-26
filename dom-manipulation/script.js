@@ -36,13 +36,7 @@ function saveQuotes() {
 function populateCategories() {
   const categories = ['all', ...new Set(quotes.map(q => q.category))];
   const categoryFilter = document.getElementById('categoryFilter');
-  categoryFilter.innerHTML = ''; // Clear existing options
-  categories.forEach(cat => {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    categoryFilter.appendChild(option);
-  });
+  categoryFilter.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
 }
 
 function filterQuotes() {
