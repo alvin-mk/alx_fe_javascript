@@ -81,3 +81,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   showRandomQuote();
 });
+const API_URL = 'https://jsonplaceholder.typicode.com/posts'; // Replace with your server URL
+
+async function syncWithServer() {
+  try {
+    const response = await fetch(API_URL);
+    const serverQuotes = await response.json();
+    // Assuming serverQuotes is an array of quotes
+    // Merge local and server quotes, with server taking precedence
+    const mergedQuotes = [...quotes, ...serverQuotes.filter(sq => !quotes.some(lq => lq.text === sq.text))];
+    quotes = mergedQuotes;
+    saveQuotes();
+    populateCategories();
+    alert('Quotes synced successfully with the server!');
+  } catch (error) {
+    console.error('Error syncing with server:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  populateCategories();
+  const selectedCategory = localStorage.getItem('selectedCategory');
+  if (selectedCategory) {
+    document.getElementById('categoryFilter').value = selectedCategory;
+  }
+  showRandomQuote();
+  setInterval(syncWithServer, 60000); // Sync with server every 60 seconds
+});
