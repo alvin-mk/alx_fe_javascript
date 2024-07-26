@@ -73,30 +73,11 @@ function exportToJsonFile() {
   link.click();
 }
 
-function importFromJsonFile(event) {
+// Improved import function with error handling
+async function importFromJsonFile(event) {
   const fileReader = new FileReader();
-  fileReader.onload = function(event) {
-    const importedQuotes = JSON.parse(event.target.result);
-    quotes.push(...importedQuotes);
-    saveQuotes();
-    updateCategories();
-    alert('Quotes imported successfully!');
-  };
-  fileReader.readAsText(event.target.files[0]);
-}
-// Assuming a function `fetchQuotesFromServer()` to retrieve quotes from a server
-
-function syncWithServer() {
-  fetchQuotesFromServer()
-    .then(serverQuotes => {
-      // Implement logic to compare serverQuotes with local quotes
-      // and resolve conflicts based on a chosen strategy (e.g., overwrite local, merge, or prompt user)
-      // Update local quotes and save to local storage
-    })
-    .catch(error => {
-      console.error('Error syncing with server:', error);
-    });
-}
-
-// Call syncWithServer periodically (e.g., every minute)
-setInterval(syncWithServer, 60000);
+  try {
+    const data = await new Promise((resolve, reject) => {
+      fileReader.onload = () => resolve(fileReader.result);
+      fileReader.onerror = reject;
+      fileReader.readAsText(event.target.files
