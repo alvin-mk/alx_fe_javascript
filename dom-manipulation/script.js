@@ -83,6 +83,21 @@ function createAddQuoteForm() {
   document.body.appendChild(formContainer);
 }
 
+function fetchQuotesFromServer() {
+  // Simulate server request with a delay
+  setTimeout(() => {
+    const serverQuotes = [
+      { text: 'The only limit to our realization of tomorrow is our doubts of today.', category: 'inspiration' },
+      { text: 'Life is 10% what happens to us and 90% how we react to it.', category: 'life' },
+    ];
+    quotes.push(...serverQuotes);
+    saveQuotes();
+    populateCategories();
+    alert('Quotes fetched from server successfully!');
+    showRandomQuote(); // Update the displayed quote after fetching from server
+  }, 1000); // Simulate network delay
+}
+
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
@@ -113,4 +128,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   showRandomQuote();
   createAddQuoteForm();
+  fetchQuotesFromServer(); // Fetch quotes from server on page load
 });
