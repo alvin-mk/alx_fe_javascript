@@ -26,7 +26,20 @@ function addQuote() {
     alert('Please enter both a quote and a category.');
   }
 }
+function createAddQuoteForm() {
+  const newQuoteText = document.getElementById('newQuoteText').value.trim();
+  const newQuoteCategory = document.getElementById('newQuoteCategory').value.trim();
 
+  if (newQuoteText && newQuoteCategory) {
+    quotes.push({ text: newQuoteText, category: newQuoteCategory });
+    saveQuotes();
+    updateCategories();
+    showRandomQuote();
+    clearAddQuoteForm();
+  } else {
+    alert('Please enter both quote text and category!');
+  }
+}
 function saveQuotes() {
   localStorage.setItem('quotes', JSON.stringify(quotes));
 }
