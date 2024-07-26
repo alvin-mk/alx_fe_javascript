@@ -101,6 +101,22 @@ async function fetchQuotesFromServer() {
   }
 }
 
+async function postQuoteToServer(quote) {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(quote)
+    });
+    const data = await response.json();
+    console.log('Quote posted to server:', data);
+  } catch (error) {
+    console.error('Error posting quote to server:', error);
+  }
+}
+
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
