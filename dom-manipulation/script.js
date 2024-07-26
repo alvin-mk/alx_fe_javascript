@@ -4,12 +4,14 @@ document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 
 function showRandomQuote() {
   const filteredQuotes = getFilteredQuotes();
+  const quoteDisplay = document.getElementById('quoteDisplay');
+  quoteDisplay.innerHTML = ''; // Clear previous quote
   if (filteredQuotes.length === 0) {
-    document.getElementById('quoteDisplay').innerText = 'No quotes available.';
+    quoteDisplay.innerText = 'No quotes available.';
     return;
   }
   const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-  document.getElementById('quoteDisplay').innerText = filteredQuotes[randomIndex].text;
+  quoteDisplay.innerText = filteredQuotes[randomIndex].text;
 }
 
 function addQuote() {
@@ -26,20 +28,7 @@ function addQuote() {
     alert('Please enter both a quote and a category.');
   }
 }
-function createAddQuoteForm() {
-  const newQuoteText = document.getElementById('newQuoteText').value.trim();
-  const newQuoteCategory = document.getElementById('newQuoteCategory').value.trim();
 
-  if (newQuoteText && newQuoteCategory) {
-    quotes.push({ text: newQuoteText, category: newQuoteCategory });
-    saveQuotes();
-    updateCategories();
-    showRandomQuote();
-    clearAddQuoteForm();
-  } else {
-    alert('Please enter both quote text and category!');
-  }
-}
 function saveQuotes() {
   localStorage.setItem('quotes', JSON.stringify(quotes));
 }
@@ -47,7 +36,13 @@ function saveQuotes() {
 function populateCategories() {
   const categories = ['all', ...new Set(quotes.map(q => q.category))];
   const categoryFilter = document.getElementById('categoryFilter');
-  categoryFilter.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+  categoryFilter.innerHTML = ''; // Clear existing options
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    categoryFilter.appendChild(option);
+  });
 }
 
 function filterQuotes() {
@@ -93,31 +88,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('categoryFilter').value = selectedCategory;
   }
   showRandomQuote();
-});
-const API_URL = 'https://jsonplaceholder.typicode.com/posts'; // Replace with your server URL
-
-async function syncWithServer() {
-  try {
-    const response = await fetch(API_URL);
-    const serverQuotes = await response.json();
-    // Assuming serverQuotes is an array of quotes
-    // Merge local and server quotes, with server taking precedence
-    const mergedQuotes = [...quotes, ...serverQuotes.filter(sq => !quotes.some(lq => lq.text === sq.text))];
-    quotes = mergedQuotes;
-    saveQuotes();
-    populateCategories();
-    alert('Quotes synced successfully with the server!');
-  } catch (error) {
-    console.error('Error syncing with server:', error);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  populateCategories();
-  const selectedCategory = localStorage.getItem('selectedCategory');
-  if (selectedCategory) {
-    document.getElementById('categoryFilter').value = selectedCategory;
-  }
-  showRandomQuote();
-  setInterval(syncWithServer, 60000); // Sync with server every 60 seconds
 });
