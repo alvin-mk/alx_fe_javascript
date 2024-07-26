@@ -84,3 +84,19 @@ function importFromJsonFile(event) {
   };
   fileReader.readAsText(event.target.files[0]);
 }
+// Assuming a function `fetchQuotesFromServer()` to retrieve quotes from a server
+
+function syncWithServer() {
+  fetchQuotesFromServer()
+    .then(serverQuotes => {
+      // Implement logic to compare serverQuotes with local quotes
+      // and resolve conflicts based on a chosen strategy (e.g., overwrite local, merge, or prompt user)
+      // Update local quotes and save to local storage
+    })
+    .catch(error => {
+      console.error('Error syncing with server:', error);
+    });
+}
+
+// Call syncWithServer periodically (e.g., every minute)
+setInterval(syncWithServer, 60000);
