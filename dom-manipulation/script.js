@@ -83,19 +83,22 @@ function createAddQuoteForm() {
   document.body.appendChild(formContainer);
 }
 
-function fetchQuotesFromServer() {
-  // Simulate server request with a delay
-  setTimeout(() => {
-    const serverQuotes = [
-      { text: 'The only limit to our realization of tomorrow is our doubts of today.', category: 'inspiration' },
-      { text: 'Life is 10% what happens to us and 90% how we react to it.', category: 'life' },
-    ];
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    const data = await response.json();
+    const serverQuotes = data.slice(0, 10).map(post => ({
+      text: post.title,
+      category: 'server'
+    }));
     quotes.push(...serverQuotes);
     saveQuotes();
     populateCategories();
     alert('Quotes fetched from server successfully!');
     showRandomQuote(); // Update the displayed quote after fetching from server
-  }, 1000); // Simulate network delay
+  } catch (error) {
+    console.error('Error fetching quotes from server:', error);
+  }
 }
 
 function importFromJsonFile(event) {
