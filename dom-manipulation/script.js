@@ -147,6 +147,7 @@ async function syncQuotes() {
     for (const quote of quotes) {
       await postQuoteToServer(quote);
     }
+    alert('Quotes synced with server!');
   } catch (error) {
     console.error('Error syncing quotes with server:', error);
   }
