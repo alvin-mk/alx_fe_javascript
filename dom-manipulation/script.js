@@ -25,7 +25,7 @@ function addQuote() {
     document.getElementById('newQuoteText').value = '';
     document.getElementById('newQuoteCategory').value = '';
     alert('Quote added successfully!');
-    postQuoteToServer(newQuote); // Sync with server after adding
+    syncQuotes(); // Sync with server after adding
   } else {
     alert('Please enter both a quote and a category.');
   }
@@ -127,6 +127,7 @@ function importFromJsonFile(event) {
     saveQuotes();
     populateCategories();
     alert('Quotes imported successfully!');
+    syncQuotes(); // Sync with server after importing
   };
   fileReader.readAsText(event.target.files[0]);
 }
@@ -139,6 +140,16 @@ function exportToJsonFile() {
   a.href = url;
   a.download = 'quotes.json';
   a.click();
+}
+
+async function syncQuotes() {
+  try {
+    for (const quote of quotes) {
+      await postQuoteToServer(quote);
+    }
+  } catch (error) {
+    console.error('Error syncing quotes with server:', error);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
