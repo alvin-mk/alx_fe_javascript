@@ -18,12 +18,14 @@ function addQuote() {
   const newQuoteText = document.getElementById('newQuoteText').value;
   const newQuoteCategory = document.getElementById('newQuoteCategory').value;
   if (newQuoteText && newQuoteCategory) {
-    quotes.push({ text: newQuoteText, category: newQuoteCategory });
+    const newQuote = { text: newQuoteText, category: newQuoteCategory };
+    quotes.push(newQuote);
     saveQuotes();
     populateCategories();
     document.getElementById('newQuoteText').value = '';
     document.getElementById('newQuoteCategory').value = '';
     alert('Quote added successfully!');
+    postQuoteToServer(newQuote); // Sync with server after adding
   } else {
     alert('Please enter both a quote and a category.');
   }
