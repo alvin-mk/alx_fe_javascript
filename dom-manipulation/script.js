@@ -161,4 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
   showRandomQuote();
   createAddQuoteForm();
   fetchQuotesFromServer(); // Fetch quotes from server on page load
+
+  // Set interval to sync quotes with the server every 5 minutes (300000 milliseconds)
+  setInterval(syncQuotes, 300000);
 });
